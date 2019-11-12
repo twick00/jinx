@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Box, Color, Text } from "ink";
-import { noop } from "lodash";
+import {Box, Color, Text} from "ink";
+import {noop} from "lodash";
 import * as os from "os";
-import { dots, LoadingIcon } from "../util-components/loadingIcon";
-import { Confirm } from "../util-components/input/confirm";
-import { Exit } from "../util-components/exit";
-import { getJsonFile } from "../../utils";
-import { CreateFile } from "../util-components/files/createFile";
-import { BuildConfig } from "../configuration/buildConfig";
+import {dots, LoadingIcon} from "../util-components/loadingIcon";
+import {Confirm} from "../util-components/input/confirm";
+import {Exit} from "../util-components/exit";
+import {getJsonFile} from "../../utils";
+import {CreateFile} from "../util-components/files/createFile";
+import {BuildConfig} from "../configuration/buildConfig";
 
 const config_path = os.homedir() + "/.jira.d/config.json";
 
-export interface JiraCreds {
+export interface JiraCredentials {
   host: string;
   email: string;
   apiKey?: string;
@@ -26,7 +26,7 @@ enum Status {
 }
 
 interface ConfiguratorProps {
-  setJiraCredentials: (credentials: JiraCreds) => void;
+  setJiraCredentials: (credentials: JiraCredentials) => void;
 }
 
 export const ConfiguratorComponent = (props: ConfiguratorProps) => {

@@ -8,17 +8,20 @@ export const exitGracefully = (time?: number) => {
 
 export interface ExitProps {
   time?: number;
+  message?: string;
 }
 
 export const Exit = (props: ExitProps) => {
-  const { time } = props;
+  const { time, message = null } = props;
   React.useEffect(() => {
     exitGracefully();
   });
-  return (
-      <Color green>
-        Exiting
-        <LoadingIcon interval={300} values={ellipsis} color={{ green: true }} />
-      </Color>
+  return message !== null ? (
+    <Color blue>{message}</Color>
+  ) : (
+    <Color green>
+      Exiting
+      <LoadingIcon interval={300} values={ellipsis} color={{ green: true }} />
+    </Color>
   );
 };

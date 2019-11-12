@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Box, Color } from "ink";
-import { LoadingIcon } from "../util-components/loadingIcon";
-import { JiraCreds } from "../pages/configuratorComponent";
-import { noop } from "lodash";
-import { UserInput } from "../util-components/input/userInput";
+import {Box, Color} from "ink";
+import {LoadingIcon} from "../util-components/loadingIcon";
+import {JiraCredentials} from "../pages/configuratorComponent";
+import {noop} from "lodash";
+import {UserInput} from "../util-components/input/userInput";
 
 interface Questions {
   type: "host" | "email" | "apiKey";
@@ -11,7 +11,7 @@ interface Questions {
 }
 
 interface BuildConfigProps {
-  doneConfig: (config: JiraCreds) => void;
+  doneConfig: (config: JiraCredentials) => void;
 }
 
 export const BuildConfig = (props: BuildConfigProps) => {
@@ -35,7 +35,8 @@ export const BuildConfig = (props: BuildConfigProps) => {
       output: "Enter the host endpoint: "
     }
   ];
-
+  //TODO: FIX PASTING
+  //TODO: STRIP EMAIL OF HTTP:// and HTTPS://
   const getQuestion = () => {
     const nextQuestion = questions.find(value => {
       return config[value.type] === null;

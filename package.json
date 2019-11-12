@@ -10,10 +10,16 @@
   },
   "dependencies": {
     "ink": "^2.5.0",
+    "ink-box": "^1.0.0",
+    "ink-divider": "^2.0.1",
+    "ink-link": "^1.0.0",
+    "ink-select-input": "^3.1.2",
     "ink-text-input": "^3.2.1",
     "jira-connector": "^2.16.1",
     "lodash": "^4.17.15",
+    "prettier": "^1.19.1",
     "react": "^16.10.2",
+    "request": "^2.88.0",
     "typescript": "^3.7.0-beta"
   },
   "devDependencies": {
@@ -28,7 +34,6 @@
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.1",
     "parcel-bundler": "^1.12.4",
-    "prettier": "1.18.2",
     "ts-node": "^8.4.1"
   }
 }
