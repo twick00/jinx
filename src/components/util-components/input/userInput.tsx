@@ -1,7 +1,6 @@
-import * as React from "react";
-import { Box, Color, useInput } from "ink";
-import TextInput from "ink-text-input";
-import { noop } from "lodash";
+import * as React from 'react';
+import { Box, Color, useInput } from 'ink';
+import TextInput from 'ink-text-input';
 
 interface InputProps {
   output: string;
@@ -10,11 +9,11 @@ interface InputProps {
 }
 
 export const UserInput = (props: InputProps) => {
-  const [input, setInput] = React.useState("");
-  const { output, onResolve = noop } = props;
-  useInput((input, key) => {
+  const [input, setInput] = React.useState('');
+  const { output, onResolve } = props;
+  useInput((i, key) => {
     if (key.return) {
-      onResolve(input);
+      onResolve(input.trim());
     }
   });
 

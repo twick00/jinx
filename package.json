@@ -9,6 +9,8 @@
     "watch": "parcel watch src/index.tsx --target node --bundle-node-modules"
   },
   "dependencies": {
+    "@babel/plugin-transform-typescript": "^7.7.4",
+    "axios": "^0.19.0",
     "ink": "^2.5.0",
     "ink-box": "^1.0.0",
     "ink-divider": "^2.0.1",
@@ -28,12 +30,19 @@
     "@types/node": "^12.11.1",
     "@types/react": "^16.9.9",
     "@types/react-dom": "^16.9.2",
-    "@typescript-eslint/eslint-plugin": "^2.4.0",
-    "@typescript-eslint/parser": "^2.4.0",
+    "@typescript-eslint/eslint-plugin": "^2.7.0",
+    "@typescript-eslint/parser": "^2.7.0",
+    "eslint": "^6.6.0",
     "eslint-config-prettier": "^6.4.0",
     "eslint-config-react": "^1.1.7",
     "eslint-plugin-prettier": "^3.1.1",
+    "eslint-plugin-react": "^7.16.0",
+    "eslint-plugin-react-hooks": "^2.2.0",
     "parcel-bundler": "^1.12.4",
     "ts-node": "^8.4.1"
+  },
+  "prettier": {
+    "jsxSingleQuote": true,
+    "singleQuote": true
   }
 }

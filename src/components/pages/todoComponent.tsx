@@ -1,10 +1,15 @@
-import * as React from "react";
-import {Box, Color, Text} from "ink";
-import {JiraConnector} from "../../index";
-import JiraClient from "jira-connector";
-import {asyncGetCurrentOpenIssues, getInProgressEmoji, getIssueColor, Issue} from "../../utils";
-import {ellipsis, LoadingIcon} from "../util-components/loadingIcon";
-import SelectInput from "ink-select-input";
+import * as React from 'react';
+import { Box, Color, Text } from 'ink';
+import JiraClient from 'jira-connector';
+import {
+  asyncGetCurrentOpenIssues,
+  getInProgressEmoji,
+  getIssueColor,
+  Issue
+} from '../../utils';
+import { ellipsis, LoadingIcon } from '../util-components/loadingIcon';
+import SelectInput from 'ink-select-input';
+import { JiraConnector } from '../context/jira';
 
 export function TicketsList() {
   return <h1>Hello world</h1>;
@@ -23,11 +28,14 @@ export function TodoComponent(props) {
   React.useEffect(() => {
     const getMyTickets = async () => {
       setLoading(true);
-      const result: Issue[] = await asyncGetCurrentOpenIssues(jira);
+      const result = await asyncGetCurrentOpenIssues(jira);
+      if (typeof result === 'string') {
+        throw new Error(result);
+      }
       setMyTickets(result);
     };
     getMyTickets();
-  }, []);
+  }, [jira]);
   const items = React.useMemo(() => {
     return myTickets.map(ticket => {
       let color = getIssueColor(ticket.fields.issuetype.name);
@@ -35,8 +43,8 @@ export function TodoComponent(props) {
       return {
         label: (
           <>
-            <Color {...color}>{ticket.key.padEnd(8)}</Color> -{" "}
-            {getInProgressEmoji(ticket.fields.status.name)} -{" "}
+            <Color {...color}>{ticket.key.padEnd(8)}</Color> -{' '}
+            {getInProgressEmoji(ticket.fields.status.name)} -{' '}
             {ticket.fields.summary}
           </>
         ),
@@ -54,14 +62,14 @@ export function TodoComponent(props) {
     setSelectedTicket(myTickets.find(issue => issue.key === ticketNumber));
   };
   return (
-    <Box flexDirection={"row"}>
+    <Box flexDirection={'row'}>
       {loading && myTickets ? (
         <>
           Fetching tickets
           <LoadingIcon values={ellipsis} />
         </>
       ) : (
-        <Box flexDirection={"column"}>
+        <Box flexDirection={'column'}>
           <SelectInput
             itemComponent={({ isSelected, label }) => {
               return <Color bold={isSelected}>{label}</Color>;
@@ -69,12 +77,12 @@ export function TodoComponent(props) {
             items={items as any}
             onSelect={item => selectTicket(item.value)}
           />
-          <Box flexDirection={"column"}>
+          <Box flexDirection={'column'}>
             {selectedTicket ? (
-                <>
-                  <Text>{selectedTicket.key}</Text>
-                  <Color gray={true}>{selectedTicket.fields.description}</Color>
-                </>
+              <>
+                <Text>{selectedTicket.key}</Text>
+                <Color gray={true}>{selectedTicket.fields.description}</Color>
+              </>
             ) : null}
           </Box>
         </Box>
@@ -82,5 +90,3 @@ export function TodoComponent(props) {
     </Box>
   );
 }
-
-// 08SbciAUsHxec6RcVJWiEADE

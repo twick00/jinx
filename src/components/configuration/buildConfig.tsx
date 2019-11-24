@@ -1,13 +1,14 @@
-import * as React from "react";
-import {Box, Color} from "ink";
-import {LoadingIcon} from "../util-components/loadingIcon";
-import {JiraCredentials} from "../pages/configuratorComponent";
-import {noop} from "lodash";
-import {UserInput} from "../util-components/input/userInput";
+import * as React from 'react';
+import { Box, Color } from 'ink';
+import { LoadingIcon } from '../util-components/loadingIcon';
+import { JiraCredentials } from '../pages/configuratorComponent';
+import { noop } from 'lodash';
+import { UserInput } from '../util-components/input/userInput';
 
 interface Questions {
-  type: "host" | "email" | "apiKey";
+  type: 'host' | 'email' | 'apiKey';
   output: string;
+  applyPost?: (value: string) => string;
 }
 
 interface BuildConfigProps {
@@ -23,20 +24,21 @@ export const BuildConfig = (props: BuildConfigProps) => {
   });
   const questions: Array<Questions> = [
     {
-      type: "apiKey",
-      output: "Enter your Jira API Key: "
+      type: 'apiKey',
+      output: 'Enter your Jira API Key: '
     },
     {
-      type: "email",
-      output: "Enter your associated Email: "
+      type: 'email',
+      output: 'Enter your associated Email: '
     },
     {
-      type: "host",
-      output: "Enter the host endpoint: "
+      type: 'host',
+      output: 'Enter the host endpoint: ',
+      // Strip email of 'http://' and 'https://'
+      applyPost: value => value.replace(/(^\w+:|^)\/\//, '')
     }
   ];
-  //TODO: FIX PASTING
-  //TODO: STRIP EMAIL OF HTTP:// and HTTPS://
+
   const getQuestion = () => {
     const nextQuestion = questions.find(value => {
       return config[value.type] === null;
@@ -45,12 +47,15 @@ export const BuildConfig = (props: BuildConfigProps) => {
       <UserInput
         key={nextQuestion.type}
         output={nextQuestion.output}
-        onResolve={value =>
+        onResolve={value => {
+          let input = nextQuestion.applyPost
+            ? nextQuestion.applyPost(value)
+            : value;
           setConfig({
             ...config,
-            [nextQuestion.type]: value
-          })
-        }
+            [nextQuestion.type]: input
+          });
+        }}
       />
     ) : null;
   };

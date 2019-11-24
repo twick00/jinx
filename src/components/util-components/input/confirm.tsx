@@ -1,6 +1,6 @@
-import { Color, Text, TextProps, useInput } from "ink";
-import * as React from "react";
-import { noop } from "lodash";
+import { Color, Text, TextProps, useInput } from 'ink';
+import * as React from 'react';
+import { noop } from 'lodash';
 
 interface ConfirmProps {
   onConfirm?: () => void;
@@ -15,8 +15,8 @@ export const Confirm = (props: ConfirmProps) => {
   const {
     onConfirm = noop,
     onDeny = noop,
-    confirmKey = "Y",
-    denyKey = "N",
+    confirmKey = 'Y',
+    denyKey = 'N',
     defaultConfirm = true,
     textProps = {}
   } = props;

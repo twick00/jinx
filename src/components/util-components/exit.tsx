@@ -1,6 +1,6 @@
-import * as React from "react";
-import {Color} from "ink";
-import {ellipsis, LoadingIcon} from "./loadingIcon";
+import * as React from 'react';
+import { Color } from 'ink';
+import { ellipsis, LoadingIcon } from './loadingIcon';
 
 export const exitGracefully = (time?: number) => {
   setTimeout(() => process.exit(0), time || 1000);

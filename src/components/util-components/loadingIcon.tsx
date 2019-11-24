@@ -1,8 +1,8 @@
-import { Color, ColorProps } from "ink";
-import * as React from "react";
+import { Color, ColorProps } from 'ink';
+import * as React from 'react';
 
-export const dots = ["⠋", "⠙", "⠹", "⠸", "⠼", "⠴", "⠦", "⠧", "⠇", "⠏"];
-export const ellipsis = ["", ".", "..", "..."];
+export const dots = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
+export const ellipsis = ['', '.', '..', '...'];
 
 export interface LoadingProps {
   values?: Array<string>;
