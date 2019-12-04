@@ -8,6 +8,13 @@
     "build": "parcel build src/index.tsx --target node --bundle-node-modules",
     "watch": "parcel watch src/index.tsx --target node --bundle-node-modules"
   },
+  "engines": {
+    "yarn": "^1.19.2"
+  },
+  "os": [
+    "darwin",
+    "linux"
+  ],
   "dependencies": {
     "@babel/plugin-transform-typescript": "^7.7.4",
     "axios": "^0.19.0",
@@ -42,6 +49,7 @@
     "ts-node": "^8.4.1"
   },
   "prettier": {
-    "singleQuote": true
+    "singleQuote": true,
+    "semi": false
   }
 }

@@ -25,7 +25,8 @@
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
     "prettier/prettier": "error",
-    "react/display-name": "warn"
+    "react/display-name": "warn",
+    "semi": ["error", "never"]
   },
   "settings": {
     "react": {

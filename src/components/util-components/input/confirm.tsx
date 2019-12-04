@@ -1,14 +1,14 @@
-import { Color, Text, TextProps, useInput } from 'ink';
-import * as React from 'react';
-import { noop } from 'lodash';
+import { Color, Text, TextProps, useInput } from 'ink'
+import * as React from 'react'
+import { noop } from 'lodash'
 
 interface ConfirmProps {
-  onConfirm?: () => void;
-  onDeny?: () => void;
-  confirmKey?: string;
-  denyKey?: string;
-  defaultConfirm?: boolean;
-  textProps?: TextProps;
+  onConfirm?: () => void
+  onDeny?: () => void
+  confirmKey?: string
+  denyKey?: string
+  defaultConfirm?: boolean
+  textProps?: TextProps
 }
 
 export const Confirm = (props: ConfirmProps) => {
@@ -19,31 +19,31 @@ export const Confirm = (props: ConfirmProps) => {
     denyKey = 'N',
     defaultConfirm = true,
     textProps = {}
-  } = props;
+  } = props
   useInput((input, key) => {
     if (
       input.toUpperCase() === confirmKey ||
       (defaultConfirm ? key.return : false)
     ) {
-      onConfirm();
+      onConfirm()
     }
     if (
       input.toUpperCase() === denyKey ||
       (!defaultConfirm ? key.return : false)
     ) {
-      onDeny();
+      onDeny()
     }
-  });
+  })
   const confirmText = (
     <Color green>
       {defaultConfirm ? confirmKey.toUpperCase() : confirmKey.toLowerCase()}
     </Color>
-  );
+  )
   const denyText = (
     <Color red>
       {defaultConfirm ? denyKey.toLowerCase() : denyKey.toUpperCase()}
     </Color>
-  );
+  )
   return defaultConfirm ? (
     <Text {...textProps}>
       {confirmText}/{denyText}
@@ -52,5 +52,5 @@ export const Confirm = (props: ConfirmProps) => {
     <Text {...textProps}>
       {denyText}/{confirmText}
     </Text>
-  );
-};
+  )
+}

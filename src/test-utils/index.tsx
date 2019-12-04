@@ -4,9 +4,9 @@ export const fiftyFifty = (p: PromiseLike<any>) => {
       Math.floor(Math.random() * 2) + 1 ===
       Math.floor(Math.random() * 2) + 1
     ) {
-      resolve(p);
+      resolve(p)
     } else {
-      reject(p);
+      reject(p)
     }
-  });
-};
+  })
+}

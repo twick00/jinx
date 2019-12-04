@@ -1,11 +1,11 @@
-import * as React from 'react';
-import { ConfiguratorComponent } from './components/pages/configuratorComponent';
-import { Box, render } from 'ink';
-import { TodoComponent } from './components/pages/todoComponent';
-import { useJiraAuthenticator, withJira } from './components/context/jira';
+import * as React from 'react'
+import { ConfiguratorComponent } from './components/pages/configuratorComponent'
+import { Box, render } from 'ink'
+import { TodoComponent } from './components/pages/todoComponent'
+import { useJiraAuthenticator, withJira } from './components/context/jira'
 
 export const App = () => {
-  const { jira, setJira, config } = useJiraAuthenticator();
+  const { jira, setJira, config } = useJiraAuthenticator()
   return (
     <>
       <Box flexDirection={'column'}>
@@ -16,8 +16,8 @@ export const App = () => {
         )}
       </Box>
     </>
-  );
-};
+  )
+}
 
-const Application = withJira(App);
-render(<Application />, { experimental: true });
+const Application = withJira(App)
+render(<Application />, { experimental: true })

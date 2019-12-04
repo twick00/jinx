@@ -1,15 +1,15 @@
-import { Color, ColorProps } from 'ink';
-import * as React from 'react';
+import { Color, ColorProps } from 'ink'
+import * as React from 'react'
 
-export const dots = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏'];
-export const ellipsis = ['', '.', '..', '...'];
+export const dots = ['⠋', '⠙', '⠹', '⠸', '⠼', '⠴', '⠦', '⠧', '⠇', '⠏']
+export const ellipsis = ['', '.', '..', '...']
 
 export interface LoadingProps {
-  values?: Array<string>;
-  interval?: number;
-  on?: boolean;
-  show?: boolean;
-  color?: ColorProps;
+  values?: Array<string>
+  interval?: number
+  on?: boolean
+  show?: boolean
+  color?: ColorProps
 }
 
 export const LoadingIcon = (props: LoadingProps) => {
@@ -19,16 +19,16 @@ export const LoadingIcon = (props: LoadingProps) => {
     on = true,
     show = true,
     color = {}
-  } = props;
-  const [index, setIndex] = React.useState(0);
+  } = props
+  const [index, setIndex] = React.useState(0)
 
   React.useEffect(() => {
     const timer = setInterval(() => {
-      index >= values.length - 1 ? setIndex(0) : setIndex(index + 1);
-    }, interval);
+      index >= values.length - 1 ? setIndex(0) : setIndex(index + 1)
+    }, interval)
     return () => {
-      clearInterval(timer);
-    };
-  });
-  return show ? <Color {...color}>{values[index]} </Color> : null;
-};
+      clearInterval(timer)
+    }
+  })
+  return show ? <Color {...color}>{values[index]} </Color> : null
+}

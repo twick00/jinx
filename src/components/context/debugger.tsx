@@ -1,17 +1,17 @@
-import * as React from 'react';
-import { noop } from 'lodash';
-import { Box, Color } from 'ink';
-import Divider from 'ink-divider';
+import * as React from 'react'
+import { noop } from 'lodash'
+import { Box, Color } from 'ink'
+import Divider from 'ink-divider'
 
-export const DebugContext = React.createContext(noop);
+export const DebugContext = React.createContext(noop)
 
 export const Debugger = ({ children }: { children: React.ReactNode }) => {
-  const [message, setMessage] = React.useState();
-  const [counter, setCounter] = React.useState(0);
+  const [message, setMessage] = React.useState()
+  const [counter, setCounter] = React.useState(0)
   const setDebugMessage = (...message) => {
-    setMessage(message.join(''));
-    setCounter(counter + 1);
-  };
+    setMessage(message.join(''))
+    setCounter(counter + 1)
+  }
   return (
     <DebugContext.Provider value={setDebugMessage}>
       <Box flexDirection={'column'}>
@@ -25,9 +25,9 @@ export const Debugger = ({ children }: { children: React.ReactNode }) => {
         </Color>
       </Box>
     </DebugContext.Provider>
-  );
-};
+  )
+}
 
 export const withDebugger = WrappedComponent => {
-  return () => <Debugger>{WrappedComponent}</Debugger>;
-};
+  return () => <Debugger>{WrappedComponent}</Debugger>
+}
