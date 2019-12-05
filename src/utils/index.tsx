@@ -292,7 +292,7 @@ export function has<T extends object>(
 }
 
 export function createFileIfNotExist(filePath: PathLike) {
-  closeSync(openSync(filePath, 'a')) //Create file if none exist
+  closeSync(openSync(filePath, 'a')) // Create file if none exist
 }
 
 export function useCacheable<T, H extends any[]>(
