@@ -2,9 +2,7 @@ import * as React from 'react'
 import { Box, Text } from 'ink'
 import { LoadingIcon } from '../loadingIcon'
 import * as fs from 'fs'
-import { PathLike } from 'fs'
 import { Confirm } from '../input/confirm'
-import { Exit } from '../exit'
 import { noop } from 'lodash'
 import * as fp from 'path'
 
@@ -13,14 +11,16 @@ interface CreateFileProps {
   fileContents: string
   onResolve: (error: NodeJS.ErrnoException, buffer: Buffer) => void
   onReject?: (error: NodeJS.ErrnoException) => void
+  onNoOverwrite?: () => void
 }
 
 export const CreateFile = (props: CreateFileProps) => {
   const {
-    path = '',
-    fileContents = null,
-    onResolve = noop,
-    onReject = noop
+    path,
+    fileContents,
+    onResolve,
+    onReject = noop,
+    onNoOverwrite = noop
   } = props
   const [message, setMessage] = React.useState(null)
 
@@ -42,7 +42,7 @@ export const CreateFile = (props: CreateFileProps) => {
       setMessage(
         <Box>
           <Text>That file already exists. Do you want to overwrite it? </Text>
-          <Confirm onConfirm={writeFile} onDeny={exit} />
+          <Confirm onConfirm={writeFile} onDeny={onNoOverwrite} />
         </Box>
       )
     } else {
@@ -55,10 +55,6 @@ export const CreateFile = (props: CreateFileProps) => {
       writeFile()
     }
   }, [props.path])
-
-  const exit = () => {
-    setMessage(<Exit />)
-  }
 
   return message
 }

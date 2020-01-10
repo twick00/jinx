@@ -22,7 +22,7 @@ export const UserInput = (props: InputProps) => {
         return
       }
       if (required && input.trim() === '') {
-        setMessage('Invalid input, try again')
+        setMessage('Input is required')
         return
       }
       onResolve(input.trim())

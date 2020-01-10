@@ -15,15 +15,7 @@ import { JiraConnector } from '../context/jira'
 import { isEmpty, noop } from 'lodash'
 import Divider from 'ink-divider'
 import Link from 'ink-link'
-
-export function TicketsList() {
-  return <h1>Hello world</h1>
-}
-
-export function Ticket(props: { ticket: Issue }) {
-  const { ticket } = props
-  return <Text>{ticket.key}</Text>
-}
+import { DescriptionComponent } from '../util-components/output/descriptionComponent'
 
 interface TabProps {
   label: string
@@ -39,20 +31,23 @@ const Tab = (props: TabProps): React.ReactComponentElement<any> => {
 interface TabsProps {
   children: React.FunctionComponentElement<TabProps>[]
   onChange?: ({ name }: { name: string }) => void
+  circular?: boolean
 }
 
 const Tabs = (props: TabsProps) => {
-  const { children, onChange = noop } = props
+  const { children, onChange = noop, circular = true } = props
   const [selectedIndex, setSelectedIndex] = React.useState(0)
   const totalChildren = children.filter(child => !!child).length
 
   useInput((input, key) => {
     if (key.leftArrow) {
-      setSelectedIndex(selectedIndex > 0 ? selectedIndex - 1 : 0)
+      const leftEdge = circular ? totalChildren - 1 : 0
+      setSelectedIndex(selectedIndex > 0 ? selectedIndex - 1 : leftEdge)
     }
     if (key.rightArrow) {
+      const rightEdge = circular ? 0 : selectedIndex
       setSelectedIndex(
-        selectedIndex < totalChildren - 1 ? selectedIndex + 1 : selectedIndex
+        selectedIndex < totalChildren - 1 ? selectedIndex + 1 : rightEdge
       )
     }
   })
@@ -92,7 +87,6 @@ export function TodoComponent(props) {
   const [loading, setLoading] = React.useState(true)
   const [myTickets, setMyTickets] = React.useState<Issue[]>([])
   const [selectedTicket, setSelectedTicket] = React.useState<Issue>()
-  const [activeTab, setActiveTab] = React.useState<string>()
   const getCacheableCurrentOpenIssues = useCacheable(
     absoluteFromRelative('~/.jira.d/cached_issues.json'),
     asyncGetCurrentOpenIssues
@@ -110,7 +104,6 @@ export function TodoComponent(props) {
           if (isEmpty(e)) {
             throw Error(e)
           }
-          setMyTickets(e)
         })
     }
     getMyTickets()
@@ -151,11 +144,13 @@ export function TodoComponent(props) {
   const selectTicket = ticketNumber => {
     setSelectedTicket(myTickets.find(issue => issue.key === ticketNumber))
   }
+
   const buildCustomFields = () => {
     return <Text>HELLO FROM CUSTOM FIELDS</Text>
   }
+
   const getUrl = (path: string) => {
-    const jiraRestPath = jira.buildURL('').split('//')
+    const jiraRestPath = path ? jira.buildURL('').split('//') : []
     jiraRestPath.pop()
     return jiraRestPath.join('//') + path
   }
@@ -204,7 +199,9 @@ export function TodoComponent(props) {
                     </Box>
                   </Tab>
                   <Tab label="Description" name="description">
-                    {selectedTicket.fields.description}
+                    <DescriptionComponent
+                      description={selectedTicket.fields.description ?? ''}
+                    />
                   </Tab>
                   {customFields ? (
                     <Tab label="Custom">{buildCustomFields()}</Tab>

@@ -34,7 +34,7 @@ interface ConfiguratorProps {
 }
 
 export const ConfiguratorComponent = (props: ConfiguratorProps) => {
-  const { setJiraCredentials = noop, config: cfg } = props
+  const { setJiraCredentials, config: cfg } = props
   const [config, setConfig] = React.useState(null)
   const [status, setStatus] = React.useState<Status>(Status.ConfigNotLoaded)
   const [message, setMessage] = React.useState()
@@ -108,6 +108,7 @@ export const ConfiguratorComponent = (props: ConfiguratorProps) => {
             onResolve={() => {
               setStatus(Status.ConfigLoaded)
             }}
+            onNoOverwrite={() => setMessage(<Exit />)}
           />
         )
       case Status.ConfigLoaded:

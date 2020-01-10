@@ -7,9 +7,11 @@ import {
   readFileSync,
   writeFile
 } from 'fs'
-import { mapKeys, mapValues, isEmpty } from 'lodash'
+import { mapKeys, mapValues, isEmpty, noop } from 'lodash'
 import JiraClient from 'jira-connector'
 import { ColorProps } from 'ink'
+import * as React from 'react'
+import * as process from 'process'
 
 const os = require('os')
 
@@ -22,6 +24,98 @@ export const absoluteFromRelative = (path: string) => {
 export const getFileType = (file: string) => {
   return file.split('.').pop()
 }
+
+export interface JiraTable {
+  headers: string[]
+  rows: string[][]
+  start?: number
+  end?: number
+}
+
+// TODO WIP Terminal Measurements
+export const useTerminalMeasurements = (
+  callback?: (measurements: { width: number; height: number }) => void
+) => {
+  const cbFn = callback ? callback : noop
+  const [measurements, setMeasuremenst] = React.useState({
+    width: process.stdout.rows,
+    height: process.stdout.columns
+  })
+  process.stdout.on('resize', () => {
+    setMeasuremenst({
+      width: process.stdout.columns,
+      height: process.stdout.rows
+    })
+  })
+  React.useEffect(() => {
+    cbFn(measurements)
+  }, [measurements])
+}
+
+export const getJiraTables = (input: string | string[]) => {
+  const splitInput = Array.isArray(input) ? input : input.split('\n')
+  let tables: JiraTable[] = []
+  const headerRegEx = /\|\|\*.+[^|*]\*\|\|$/
+  const rowsRegEx = /\|(.+[^|*]\|)+/
+  const removeEmpty = arr => {
+    return arr.filter(val => !!val)
+  }
+  splitInput.forEach((line, idx, arr) => {
+    if (headerRegEx.test(line)) {
+      const splitHeader = line.split(/\*?\|\|\*?/)
+      const table = {
+        headers: removeEmpty(splitHeader),
+        rows: [],
+        start: idx,
+        end: 0
+      }
+      let increment = 1
+      while (rowsRegEx.test(arr[idx + increment])) {
+        const splitRows = arr[idx + increment].split('|')
+        table.rows.push(removeEmpty(splitRows))
+        increment += 1
+      }
+      table.end = idx + increment - 1
+      tables.push(table)
+    }
+  })
+  return tables
+}
+
+interface ReplaceTables {
+  input: string
+  tables: JiraTable[]
+  headReplacerFn?: (
+    value: string[],
+    raw: React.ReactComponentElement<any>
+  ) => React.ReactComponentElement<any>
+  rowReplacerFn?: (
+    value: string[],
+    raw: React.ReactComponentElement<any>
+  ) => React.ReactComponentElement<any>
+}
+
+// const replaceTables = ({
+//   input,
+//   tables,
+//   headReplacerFn,
+//   rowReplacerFn
+// }: ReplaceTables) => {
+//   const splitInput: React.ReactComponentElement<any>[] = input.split('\n')
+//   tables.forEach(table => {
+//     const header = headReplacerFn(table.headers, splitInput[table.start])
+//     if (header) {
+//       splitInput[table.start] = header
+//     }
+//     table.rows.forEach((row, idx) => {
+//       splitInput[idx + 1 + table.start] = rowReplacerFn(
+//         row,
+//         splitInput[idx + 1 + table.start]
+//       ) //?
+//     })
+//   })
+//   return splitInput
+// }
 
 export const getJsonFile = (path: PathLike) => {
   if (existsSync(path)) {
@@ -67,7 +161,7 @@ export const getInProgressEmoji = (progressName: ProgressName) => {
     case 'In Progress':
       return '🧨'
     case 'QA':
-      return '❇️'
+      return '❇️ ' // This emoji takes us more space for some reason
     case 'Staging':
       return '✅'
     case 'Blocked':
@@ -108,12 +202,12 @@ export interface CustomIssueFields {
 
 interface IssueFields extends CustomIssueFields {
   assignee: {
-    emailAddress: string
     displayName: string
+    emailAddress: string
   }
   reporter: {
-    emailAddress: string
     displayName: string
+    emailAddress: string
   }
   subtasks: any[]
   issuetype: {
@@ -126,9 +220,17 @@ interface IssueFields extends CustomIssueFields {
       | 'Sub-task'
       | 'Customer Feedback'
       | string
+    subtask: string
   }
   project: {
     name: string
+  }
+  priority: {
+    name: string
+  }
+  creator: {
+    email: string
+    displayName: string
   }
   description: string
   summary: string
@@ -140,6 +242,7 @@ interface IssueFields extends CustomIssueFields {
     name: ProgressName
   }
   created: string
+  updated: string
   attachments: any[]
 }
 
@@ -150,24 +253,32 @@ export interface Issue {
 }
 
 const referenceIssue: Issue = {
-  key: '',
-  self: '',
   fields: {
+    assignee: {
+      emailAddress: '',
+      displayName: ''
+    },
     attachments: [],
+    creator: {
+      displayName: '',
+      email: ''
+    },
     comment: { comments: [], total: 0 },
     created: '',
     description: '',
-    issuetype: { name: '' },
+    issuetype: { name: '', subtask: '' },
+    priority: {
+      name: ''
+    },
     project: { name: '' },
     reporter: { displayName: '', emailAddress: '' },
     status: { name: '' },
     subtasks: [],
     summary: '',
-    assignee: {
-      emailAddress: '',
-      displayName: ''
-    }
-  }
+    updated: ''
+  },
+  key: '',
+  self: ''
 }
 
 //Todo: Add title field for rendering readable description
@@ -220,7 +331,6 @@ export const transformCustomFields = (
   const customFieldsFile: CustomFields = getJsonFile(path)
   if (!customFieldsFile) return originalIssue
   return mapKeys<IssueFields>(originalIssue, (val, key) => {
-    console.log(customFieldsFile)
     if (customFieldsFile[key]) {
       return customFieldsFile[key].label
     }

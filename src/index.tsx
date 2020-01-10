@@ -19,5 +19,8 @@ export const App = () => {
   )
 }
 
-const Application = withJira(App)
+let Application = App
+Application = withJira(Application)
+// Application = withDebugger(Application)
+
 render(<Application />, { experimental: true })
