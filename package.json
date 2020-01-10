@@ -9,7 +9,7 @@
     "watch": "parcel watch src/index.tsx --target node --bundle-node-modules"
   },
   "engines": {
-    "yarn": "^1.19.2"
+    "yarn": "^1.19.0"
   },
   "os": [
     "darwin",
